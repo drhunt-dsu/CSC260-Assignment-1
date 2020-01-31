@@ -11,6 +11,7 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,8 +22,10 @@ namespace DanHuntCalculatorAssignment
 
         private float? _memVal;
         private const string InitialValue = "0";
-        private Stack<float> numbers; //Stores numbers to be math'd upon
-        private Stack<string> operands; //Stores math to math upon the numbers
+        private const string StockOperands = @"^-+*x/%";
+        private const string OperandRegex = @"[-+*x\/%\^]"; //Hopefully matches all math operands
+        private Stack<float> numberStack; //Stores numbers to be math'd upon
+        private Stack<string> operandStack; //Stores math to math upon the numbers
         private Stack<string> mathHistory; //Stores historical list of math
 
         public Calculator()
@@ -30,6 +33,11 @@ namespace DanHuntCalculatorAssignment
             InitializeComponent();
             mathHistory = new Stack<string>();
             ResetCalculator(); //Set Calculator to initial value so we don't have an empty string
+        }
+
+        private void Calculator_Load(object sender, EventArgs e)
+        {
+            //I don't remember what I clicked on to create this method but at this point I'm too afraid to delete it
         }
 
         #region ButtonHandlers
@@ -89,13 +97,23 @@ namespace DanHuntCalculatorAssignment
             StoreValueInMemory();
         }
 
+        private void btnDecimal_Click(object sender, EventArgs e)
+        {
+            AddDecimalToCurrentNumber();
+        }
+
         private void btnEquals_Click(object sender, EventArgs e)
         {
+            PopulateStacks(); //Populate number and operand stacks for mathy math
+
             //Kind of placeholder stuff to check if history is working. Not sure if I will ever need this mathHistory stack 
             //mathHistory stack feeling useless, might delete later
             mathHistory.Push(tbxInputOutput.Text);
             tbxHistory.Text += tbxInputOutput.Text + Environment.NewLine; //Eventually need to replace this with whole math equation
-            ResetInputOutputTbx();
+            ResetInputOutputTbx(); //Clear the input from the box
+
+            //Add something here to do math
+            //Add something here to populate the box with the most recent answer
         }
 
         #endregion
@@ -147,18 +165,56 @@ namespace DanHuntCalculatorAssignment
         {
             tbxInputOutput.Text = InitialValue;
         }
+
+        private void AddDecimalToCurrentNumber()
+        {
+            //We only want to append a decimal if the LAST number in the box does not already have one.
+            //For this we will quickly split the equation with regex and check the last number in the list.
+
+            var currentString = tbxInputOutput.Text;
+            //Stackoverflow to the rescue with this regex
+            //https://stackoverflow.com/questions/13525024/how-to-split-a-mathematical-expression-on-operators-as-delimiters-while-keeping
+            string[] numbers = Regex.Split(currentString, @"[-+*x/%]");
+            if (!numbers.Last().Contains("."))
+            {
+                AppendToInputOutputBox(".");
+            }
+        }
         #endregion
         #region Utility Functions
         private void ResetCalculator()
         {
+            ClearNumberAndOperandStacks();
             ResetInputOutputTbx();
             ClearValueInMemory();
         }
+
+        private void PopulateStacks()
+        {
+            ClearNumberAndOperandStacks(); //Clear existing data in stacks
+            var currentString = tbxInputOutput.Text; //capture the textbox data in a string that we can manipulate
+            currentString = currentString.Replace(" ", string.Empty); //remove all whitespace since we don't care about it for math
+
+            //Get all the numbers in left to right oder and push onto number stack
+            var numbers = Regex.Split(currentString, OperandRegex);
+            numbers.ToList().ForEach(number => numberStack.Push(float.Parse(number)));
+            //Get all the operands in left to right order and push onto stack
+            foreach (var character in currentString)
+            {
+                if (StockOperands.Contains(character))
+                {
+                    operandStack.Push(character.ToString());
+                }
+            }
+        }
+
+        private void ClearNumberAndOperandStacks()
+        {
+            numberStack = new Stack<float>();
+            operandStack = new Stack<string>();
+        }
         #endregion
 
-        private void Calculator_Load(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
