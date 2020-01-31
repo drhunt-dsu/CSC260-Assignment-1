@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,16 @@ namespace DanHuntCalculatorAssignment
     public partial class Calculator : Form
     {
 
-        private float _memVal;
+        private float? _memVal;
         private const string InitialValue = "0";
+        private Stack<float> numbers; //Stores numbers to be math'd upon
+        private Stack<string> operands; //Stores math to math upon the numbers
+        private Stack<string> mathHistory; //Stores historical list of math
 
         public Calculator()
         {
             InitializeComponent();
+            mathHistory = new Stack<string>();
             ResetCalculator(); //Set Calculator to initial value so we don't have an empty string
         }
 
@@ -31,6 +36,13 @@ namespace DanHuntCalculatorAssignment
         private void btnNumberKeys_Click(object sender, EventArgs e)
         {
             AppendToInputOutputBox(((ButtonBase) sender).Text);
+        }
+
+        private void btnOperand_click(object sender, EventArgs e)
+        {
+            //Keeping sparate from number key method in case I want to do something different
+            var stringToAppend = $" {((ButtonBase) sender).Text} ";
+            AppendToInputOutputBox(stringToAppend);
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -57,9 +69,14 @@ namespace DanHuntCalculatorAssignment
             ResetInputOutputTbx();
         }
 
+        private void btnClearAll_Click(object sender, EventArgs e)
+        {
+            ResetCalculator();
+        }
+
         private void btnMemRestore_Click(object sender, EventArgs e)
         {
-            RestoreValueFromMemory();
+            RecallValueFromMemory();
         }
 
         private void btnMemClear_Click(object sender, EventArgs e)
@@ -69,24 +86,38 @@ namespace DanHuntCalculatorAssignment
 
         private void btnMemStore_Click(object sender, EventArgs e)
         {
-            UpdateMemoryValueAndLabel();
-        }
-        #endregion
-        #region Stored memory value functions
-        private void UpdateMemoryValueAndLabel()
-        {
-            _memVal = float.Parse(tbxInputOutput.Text);
-            lblMemVal.Text = _memVal.ToString(CultureInfo.InvariantCulture);
+            StoreValueInMemory();
         }
 
-        private void RestoreValueFromMemory()
+        private void btnEquals_Click(object sender, EventArgs e)
         {
-            tbxInputOutput.Text = _memVal.ToString(CultureInfo.InvariantCulture);
+            //Kind of placeholder stuff to check if history is working. Not sure if I will ever need this mathHistory stack 
+            //mathHistory stack feeling useless, might delete later
+            mathHistory.Push(tbxInputOutput.Text);
+            tbxHistory.Text += tbxInputOutput.Text + Environment.NewLine; //Eventually need to replace this with whole math equation
+            ResetInputOutputTbx();
+        }
+
+        #endregion
+        #region Stored memory value functions
+        private void StoreValueInMemory()
+        {
+            _memVal = float.Parse(tbxInputOutput.Text);
+            lblMemVal.Text = _memVal.ToString();
+        }
+
+        private void RecallValueFromMemory()
+        {
+            if (_memVal != null)
+            {
+                tbxInputOutput.Text = _memVal.ToString();
+            }
+            
         }
 
         private void ClearValueInMemory()
         {
-            _memVal = 0;
+            _memVal = null;
             lblMemVal.Text = string.Empty;
         }
         #endregion
@@ -104,6 +135,14 @@ namespace DanHuntCalculatorAssignment
             }
         }
 
+        private void ReadTexbox()
+        {
+            string mathString = tbxInputOutput.Text;
+            List<float> numbersToPush = new List<float>();
+            List<string> operandsToPush = new List<string>();
+
+        }
+
         private void ResetInputOutputTbx()
         {
             tbxInputOutput.Text = InitialValue;
@@ -116,5 +155,10 @@ namespace DanHuntCalculatorAssignment
             ClearValueInMemory();
         }
         #endregion
+
+        private void Calculator_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

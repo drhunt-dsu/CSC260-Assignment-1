@@ -58,6 +58,8 @@
             this.btnEquals = new System.Windows.Forms.Button();
             this.lblMemory = new System.Windows.Forms.Label();
             this.lblMemVal = new System.Windows.Forms.Label();
+            this.lblHistory = new System.Windows.Forms.Label();
+            this.tbxHistory = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbxInputOutput
@@ -65,7 +67,7 @@
             this.tbxInputOutput.Location = new System.Drawing.Point(97, 37);
             this.tbxInputOutput.Name = "tbxInputOutput";
             this.tbxInputOutput.ReadOnly = true;
-            this.tbxInputOutput.Size = new System.Drawing.Size(200, 20);
+            this.tbxInputOutput.Size = new System.Drawing.Size(171, 20);
             this.tbxInputOutput.TabIndex = 0;
             this.tbxInputOutput.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -116,6 +118,7 @@
             this.btnClearAll.TabIndex = 5;
             this.btnClearAll.Text = "CE";
             this.btnClearAll.UseVisualStyleBackColor = true;
+            this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
             // 
             // btnClearBox
             // 
@@ -172,6 +175,7 @@
             this.btnDivide.TabIndex = 11;
             this.btnDivide.Text = "/";
             this.btnDivide.UseVisualStyleBackColor = true;
+            this.btnDivide.Click += new System.EventHandler(this.btnOperand_click);
             // 
             // btnSeven
             // 
@@ -209,8 +213,9 @@
             this.btnMultiply.Name = "btnMultiply";
             this.btnMultiply.Size = new System.Drawing.Size(56, 33);
             this.btnMultiply.TabIndex = 15;
-            this.btnMultiply.Text = "X";
+            this.btnMultiply.Text = "x";
             this.btnMultiply.UseVisualStyleBackColor = true;
+            this.btnMultiply.Click += new System.EventHandler(this.btnOperand_click);
             // 
             // btnFour
             // 
@@ -250,6 +255,7 @@
             this.btnSubtract.TabIndex = 19;
             this.btnSubtract.Text = "-";
             this.btnSubtract.UseVisualStyleBackColor = true;
+            this.btnSubtract.Click += new System.EventHandler(this.btnOperand_click);
             // 
             // btnOne
             // 
@@ -289,6 +295,7 @@
             this.btnPlus.TabIndex = 23;
             this.btnPlus.Text = "+";
             this.btnPlus.UseVisualStyleBackColor = true;
+            this.btnPlus.Click += new System.EventHandler(this.btnOperand_click);
             // 
             // btnPosNeg
             // 
@@ -325,6 +332,7 @@
             this.btnEquals.TabIndex = 27;
             this.btnEquals.Text = "=";
             this.btnEquals.UseVisualStyleBackColor = true;
+            this.btnEquals.Click += new System.EventHandler(this.btnEquals_Click);
             // 
             // lblMemory
             // 
@@ -345,11 +353,33 @@
             this.lblMemVal.Size = new System.Drawing.Size(0, 13);
             this.lblMemVal.TabIndex = 29;
             // 
+            // lblHistory
+            // 
+            this.lblHistory.AutoSize = true;
+            this.lblHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHistory.Location = new System.Drawing.Point(364, 37);
+            this.lblHistory.Name = "lblHistory";
+            this.lblHistory.Size = new System.Drawing.Size(65, 20);
+            this.lblHistory.TabIndex = 30;
+            this.lblHistory.Text = "History";
+            // 
+            // tbxHistory
+            // 
+            this.tbxHistory.Location = new System.Drawing.Point(308, 75);
+            this.tbxHistory.Multiline = true;
+            this.tbxHistory.Name = "tbxHistory";
+            this.tbxHistory.ReadOnly = true;
+            this.tbxHistory.Size = new System.Drawing.Size(200, 303);
+            this.tbxHistory.TabIndex = 31;
+            this.tbxHistory.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // Calculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 411);
+            this.ClientSize = new System.Drawing.Size(540, 405);
+            this.Controls.Add(this.tbxHistory);
+            this.Controls.Add(this.lblHistory);
             this.Controls.Add(this.lblMemVal);
             this.Controls.Add(this.lblMemory);
             this.Controls.Add(this.btnEquals);
@@ -382,6 +412,7 @@
             this.Controls.Add(this.tbxInputOutput);
             this.Name = "Calculator";
             this.Text = "Dan Hunt\'s Mediocre Calculator";
+            this.Load += new System.EventHandler(this.Calculator_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -419,6 +450,8 @@
         private System.Windows.Forms.Button btnEquals;
         private System.Windows.Forms.Label lblMemory;
         private System.Windows.Forms.Label lblMemVal;
+        private System.Windows.Forms.Label lblHistory;
+        private System.Windows.Forms.TextBox tbxHistory;
     }
 }
 
