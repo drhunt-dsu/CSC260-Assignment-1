@@ -12,31 +12,38 @@ namespace DanHuntCalculatorAssignment
         //Just test basic operations with two operands
         {
             [Test]
-            public void Multiplies()
+            public void MultipliesSimpleEquation()
             {
                 var result = MathHelper.DoMath("1x2");
                 Assert.That(result, Is.EqualTo(1 * 2));
             }
 
             [Test]
-            public void Divides()
+            public void DividesSimpleEquation()
             {
                 var result = MathHelper.DoMath("6/2");
                 Assert.That(result, Is.EqualTo(6 / 2));
             }
 
             [Test]
-            public void Adds()
+            public void AddsSimpleEquation()
             {
                 var result = MathHelper.DoMath("20+3");
                 Assert.That(result, Is.EqualTo(20 + 3));
             }
 
             [Test]
-            public void Subtracts()
+            public void SubtractsSimpleEquation()
             {
                 var result = MathHelper.DoMath("10-6");
                 Assert.That(result, Is.EqualTo(10 - 6));
+            }
+
+            [Test]
+            public void SolvesMixedEquation()
+            {
+                var result = MathHelper.DoMath("10+2/2*3");
+                Assert.That(result, Is.EqualTo(10 + 2 / 2 * 3));
             }
         }
 

@@ -37,16 +37,19 @@ namespace DanHuntCalculatorAssignment
                 //If it has no operators, consider the equation solved and return the string. This is the escape condition / base case for the recursive function
                 return equation;
             }
+
             //if it has at least one operator, solve the highest priority operator and recursively call this method on the remaining string
-            var operatorIndex = FindHighestPriorityOperatorIndex(equation); //Find highest priority operator
-            var operands = GetOperands(equation, operatorIndex);
+            var operatorIndex = FindHighestPriorityOperatorIndex(equation); //Find highest priority operator's position in the string
+            var operands = GetOperands(equation, operatorIndex); //Get operands and store in an array
             var operatorSymbol = equation[operatorIndex].ToString(); //Get operator itself
 
             var partialSolve = SolveOperator(operands[0], operands[1], operatorSymbol); //Solve this portion onf the equation
 
-            var remainingEquation = equation.Remove(0, operatorIndex + 2); //Hold the remaining equation
+            var firstPartOfEquation = equation.Substring(0, operatorIndex - operands[0].ToString().Length);
+            var lastPartOfEquation =
+                equation.Substring(operatorIndex+1 + operands[1].ToString().Length);
 
-            return SolveEquation(partialSolve+remainingEquation); //Combine the result & remaining equation, continue solving it.
+            return SolveEquation(firstPartOfEquation+partialSolve+lastPartOfEquation); //Combine the result & remaining equation, continue solving it.
         }
 
         private static double[] GetOperands(string equation, int index)
