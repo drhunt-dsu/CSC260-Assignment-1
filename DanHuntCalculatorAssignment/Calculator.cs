@@ -4,15 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DanHuntCalculatorAssignment
@@ -23,7 +16,7 @@ namespace DanHuntCalculatorAssignment
         private float? _memVal;
         private const string InitialValue = "0";
         private const string StockOperators = MathHelper.PrioritizedOperators;
-        private const string OperatorRegex = @"[-+*x\/%\^]"; //Hopefully matches all math operators
+        private const string OperatorRegex = MathHelper.OperatorRegex;
         private Stack<float> numberStack; //Stores numbers to be math'd upon
         private Stack<string> operatorStack; //Stores math to math upon the numbers
         private Stack<string> mathHistory; //Stores historical list of math

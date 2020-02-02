@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using NUnit.Framework;
 
 namespace DanHuntCalculatorAssignment
@@ -11,7 +8,7 @@ namespace DanHuntCalculatorAssignment
     {
         //Created a unit test class to rapidly test different equations without using the UI
         //used NUnit framework since that's what I'm used to using
-        public class BasicOperationTests
+        public class DoMathTests
         //Just test basic operations with two operands
         {
             [Test]
@@ -71,6 +68,65 @@ namespace DanHuntCalculatorAssignment
             {
                 var result = MathHelper.SolveOperator(10,6,"-");
                 Assert.That(result, Is.EqualTo(10 - 6));
+            }
+        }
+
+        public class FindNumberOfOperatorsTests
+        {
+            [Test]
+            public void FindsZero()
+            {
+                var result = MathHelper.FindNumberOfOperatorsInEquation("This string doesn't have any operators");
+                Assert.That(result, Is.EqualTo(0));
+            }
+
+            [Test]
+            public void FindNestedOperators()
+            {
+                var result = MathHelper.FindNumberOfOperatorsInEquation("Nested + Operators * Are / Fun -");
+                Assert.That(result, Is.EqualTo(4));
+            }
+        }
+
+        public class FindHighestPriorityOperatorIndexTests
+        {
+            [Test]
+            public void ReturnsNegative1IfNoOperator()
+            {
+                var result = MathHelper.FindHighestPriorityOperatorIndex("abc123 no operator here");
+                Assert.That(result, Is.EqualTo(-1));
+            }
+
+            [Test]
+            public void FindsLowestPriorityOperatorIfItsTheOnlyOneInTheString()
+            {
+                var lowestPriorityOperator = MathHelper.PrioritizedOperators.Last();
+                var searchString = $"This string has only one operator and it is {lowestPriorityOperator}";
+
+                var result = MathHelper.FindHighestPriorityOperatorIndex(searchString);
+
+                Assert.That(result, Is.EqualTo(searchString.IndexOf(lowestPriorityOperator)));
+            }
+
+            [Test]
+            public void FindsHighestPriorityOperatorWhenSeveralArePresent()
+            {
+                var equation = "12-44+32/3*96";
+                var result = MathHelper.FindHighestPriorityOperatorIndex(equation);
+
+                Assert.That(result, Is.EqualTo(equation.IndexOf("*")));
+            }
+
+            [Test]
+            public void FindsOnyFirstInstanceOfHighestPriorityOperator()
+            {
+                var equation = "12*44*32*3*96";
+
+                var result = MathHelper.FindHighestPriorityOperatorIndex(equation);
+
+                Assert.That(result, Is.EqualTo(equation.IndexOf("*")));
+                //This next test duplicates the above assert but leaving it to be clear what I'm explicitly testing
+                Assert.That(result, Is.EqualTo(2)); 
             }
         }
     }
