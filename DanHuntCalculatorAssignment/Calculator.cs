@@ -22,22 +22,22 @@ namespace DanHuntCalculatorAssignment
 
         private float? _memVal;
         private const string InitialValue = "0";
-        private const string StockOperands = @"^-+*x/%";
-        private const string OperandRegex = @"[-+*x\/%\^]"; //Hopefully matches all math operands
+        private const string StockOperators = MathHelper.PrioritizedOperators;
+        private const string OperatorRegex = @"[-+*x\/%\^]"; //Hopefully matches all math operators
         private Stack<float> numberStack; //Stores numbers to be math'd upon
-        private Stack<string> operandStack; //Stores math to math upon the numbers
+        private Stack<string> operatorStack; //Stores math to math upon the numbers
         private Stack<string> mathHistory; //Stores historical list of math
 
         public Calculator()
         {
             InitializeComponent();
-            mathHistory = new Stack<string>();
-            ResetCalculator(); //Set Calculator to initial value so we don't have an empty string
+            var blah = MathHelper.DoMath("1");
         }
 
         private void Calculator_Load(object sender, EventArgs e)
         {
-            //I don't remember what I clicked on to create this method but at this point I'm too afraid to delete it
+            mathHistory = new Stack<string>();
+            ResetCalculator(); //Set Calculator to initial value so we don't have an empty string
         }
 
         #region ButtonHandlers
@@ -46,7 +46,7 @@ namespace DanHuntCalculatorAssignment
             AppendToInputOutputBox(((ButtonBase) sender).Text);
         }
 
-        private void btnOperand_click(object sender, EventArgs e)
+        private void btnOperator_click(object sender, EventArgs e)
         {
             //Keeping sparate from number key method in case I want to do something different
             var stringToAppend = $" {((ButtonBase) sender).Text} ";
@@ -104,7 +104,7 @@ namespace DanHuntCalculatorAssignment
 
         private void btnEquals_Click(object sender, EventArgs e)
         {
-            PopulateStacks(); //Populate number and operand stacks for mathy math
+            PopulateStacks(); //Populate number and Operator stacks for mathy math
 
             //Kind of placeholder stuff to check if history is working. Not sure if I will ever need this mathHistory stack 
             //mathHistory stack feeling useless, might delete later
@@ -157,7 +157,7 @@ namespace DanHuntCalculatorAssignment
         {
             string mathString = tbxInputOutput.Text;
             List<float> numbersToPush = new List<float>();
-            List<string> operandsToPush = new List<string>();
+            List<string> operatorsToPush = new List<string>();
 
         }
 
@@ -184,34 +184,34 @@ namespace DanHuntCalculatorAssignment
         #region Utility Functions
         private void ResetCalculator()
         {
-            ClearNumberAndOperandStacks();
+            ClearNumberAndOperatorStacks();
             ResetInputOutputTbx();
             ClearValueInMemory();
         }
 
         private void PopulateStacks()
         {
-            ClearNumberAndOperandStacks(); //Clear existing data in stacks
+            ClearNumberAndOperatorStacks(); //Clear existing data in stacks
             var currentString = tbxInputOutput.Text; //capture the textbox data in a string that we can manipulate
             currentString = currentString.Replace(" ", string.Empty); //remove all whitespace since we don't care about it for math
 
             //Get all the numbers in left to right oder and push onto number stack
-            var numbers = Regex.Split(currentString, OperandRegex);
+            var numbers = Regex.Split(currentString, OperatorRegex);
             numbers.ToList().ForEach(number => numberStack.Push(float.Parse(number)));
-            //Get all the operands in left to right order and push onto stack
+            //Get all the operators in left to right order and push onto stack
             foreach (var character in currentString)
             {
-                if (StockOperands.Contains(character))
+                if (StockOperators.Contains(character))
                 {
-                    operandStack.Push(character.ToString());
+                    operatorStack.Push(character.ToString());
                 }
             }
         }
 
-        private void ClearNumberAndOperandStacks()
+        private void ClearNumberAndOperatorStacks()
         {
             numberStack = new Stack<float>();
-            operandStack = new Stack<string>();
+            operatorStack = new Stack<string>();
         }
         #endregion
 

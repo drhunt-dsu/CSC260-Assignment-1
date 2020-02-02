@@ -7,3 +7,16 @@ C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssig
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.GenerateResource.cache
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.exe
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.pdb
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\DanHuntCalculatorAssignment.exe.config
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\DanHuntCalculatorAssignment.exe
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\DanHuntCalculatorAssignment.pdb
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csprojAssemblyReference.cache
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.Calculator.resources
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.Properties.Resources.resources
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.GenerateResource.cache
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.exe
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.pdb
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.dll
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.pdb
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.xml
+D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.CopyComplete
