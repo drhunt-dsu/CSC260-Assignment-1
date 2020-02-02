@@ -27,6 +27,7 @@ namespace DanHuntCalculatorAssignment
                 var result = MathHelper.DoMath("6/2");
                 Assert.That(result, Is.EqualTo(6 / 2));
             }
+
             [Test]
             public void Adds()
             {
@@ -41,7 +42,37 @@ namespace DanHuntCalculatorAssignment
                 Assert.That(result, Is.EqualTo(10 - 6));
             }
         }
-    }
 
+        public class SolveOperatorTests
+        {
+            [Test]
+            public void Multiplies()
+            {
+                var result = MathHelper.SolveOperator(1,2, "x");
+                Assert.That(result, Is.EqualTo(1 * 2));
+            }
+
+            [Test]
+            public void Divides()
+            {
+                var result = MathHelper.SolveOperator(6,2,"/");
+                Assert.That(result, Is.EqualTo(6 / 2));
+            }
+
+            [Test]
+            public void Adds()
+            {
+                var result = MathHelper.SolveOperator(20,3,"+");
+                Assert.That(result, Is.EqualTo(20 + 3));
+            }
+
+            [Test]
+            public void Subtracts()
+            {
+                var result = MathHelper.SolveOperator(10,6,"-");
+                Assert.That(result, Is.EqualTo(10 - 6));
+            }
+        }
+    }
 }
 
