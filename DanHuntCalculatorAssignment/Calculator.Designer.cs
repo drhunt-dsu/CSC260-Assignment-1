@@ -314,6 +314,7 @@
             this.btnZero.TabIndex = 25;
             this.btnZero.Text = "0";
             this.btnZero.UseVisualStyleBackColor = true;
+            this.btnZero.Click += new System.EventHandler(this.btnZero_Click);
             // 
             // btnDecimal
             // 
@@ -376,8 +377,10 @@
             // 
             // Calculator
             // 
+            this.AcceptButton = this.btnEquals;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnClearAll;
             this.ClientSize = new System.Drawing.Size(540, 405);
             this.Controls.Add(this.tbxHistory);
             this.Controls.Add(this.lblHistory);
@@ -411,6 +414,7 @@
             this.Controls.Add(this.btnMemClear);
             this.Controls.Add(this.lblInputOutput);
             this.Controls.Add(this.tbxInputOutput);
+            this.KeyPreview = true;
             this.Name = "Calculator";
             this.Text = "Dan Hunt\'s Mediocre Calculator";
             this.Load += new System.EventHandler(this.Calculator_Load);

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DanHuntCalculatorAssignment
 {
+    [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
     public static class MathHelper
     //This class will control all the actual math guts of the calculator
     {
@@ -149,13 +151,13 @@ namespace DanHuntCalculatorAssignment
         private static double Divide(double numerator, double denominator)
         {
             //Attempts to divide two numbers, throws an exception if dividing by zero
-            try
-            {
-                return numerator / denominator;
-            }
-            catch
+            if (denominator == 0)
             {
                 throw new ArithmeticException("Cannot divide by zero!");
+            }
+            else
+            {
+                return numerator / denominator;
             }
         }
 

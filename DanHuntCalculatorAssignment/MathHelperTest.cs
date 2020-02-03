@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 
 namespace DanHuntCalculatorAssignment
@@ -9,7 +8,6 @@ namespace DanHuntCalculatorAssignment
         //Created a unit test class to rapidly test different equations without using the UI
         //used NUnit framework since that's what I'm used to using
         public class DoMathTests
-        //Just test basic operations with two operands
         {
             [Test]
             public void MultipliesSimpleEquation()
