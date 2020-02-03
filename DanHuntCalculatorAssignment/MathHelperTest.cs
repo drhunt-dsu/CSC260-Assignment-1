@@ -1,5 +1,8 @@
 ﻿using System.Linq;
+using System.Security;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
+// ReSharper disable StringIndexOfIsCultureSpecific.1
 
 namespace DanHuntCalculatorAssignment
 {
@@ -12,36 +15,50 @@ namespace DanHuntCalculatorAssignment
             [Test]
             public void MultipliesSimpleEquation()
             {
-                var result = MathHelper.DoMath("1x2");
+                var result = MathHelper.DoMath("1 x 2");
                 Assert.That(result, Is.EqualTo(1 * 2));
             }
 
             [Test]
             public void DividesSimpleEquation()
             {
-                var result = MathHelper.DoMath("6/2");
+                var result = MathHelper.DoMath("6 / 2");
                 Assert.That(result, Is.EqualTo(6 / 2));
             }
 
             [Test]
             public void AddsSimpleEquation()
             {
-                var result = MathHelper.DoMath("20+3");
+                var result = MathHelper.DoMath("20 + 3");
                 Assert.That(result, Is.EqualTo(20 + 3));
             }
 
             [Test]
             public void SubtractsSimpleEquation()
             {
-                var result = MathHelper.DoMath("10-6");
+                var result = MathHelper.DoMath("10 - 6");
                 Assert.That(result, Is.EqualTo(10 - 6));
             }
 
             [Test]
             public void SolvesMixedEquation()
             {
-                var result = MathHelper.DoMath("10+2/2*3");
+                var result = MathHelper.DoMath("10 + 2 / 2 * 3");
                 Assert.That(result, Is.EqualTo(10 + 2 / 2 * 3));
+            }
+
+            [Test]
+            public void SolvesMixedEquationWithNegatives()
+            {
+                var result = MathHelper.DoMath("10 - -28 / -14 * -3");
+                Assert.That(result, Is.EqualTo(10 - -28 / -14 * -3));
+            }
+
+            [Test]
+            public void SolvesEquationThatStartsWithNegative()
+            {
+                var result = MathHelper.DoMath("-13 + 4");
+                Assert.That(result, Is.EqualTo(-13 + 4));
             }
         }
 
@@ -88,8 +105,22 @@ namespace DanHuntCalculatorAssignment
             [Test]
             public void FindNestedOperators()
             {
-                var result = MathHelper.FindNumberOfOperatorsInEquation("Nested + Operators * Are / Fun -");
+                var result = MathHelper.FindNumberOfOperatorsInEquation("1 + 2 / 3 * 4 - 5");
                 Assert.That(result, Is.EqualTo(4));
+            }
+
+            [Test]
+            public void HandlesNegativesAtStart()
+            {
+                var result = MathHelper.FindNumberOfOperatorsInEquation("-13 + 4");
+                Assert.That(result, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void HandlesNegativesInMiddle()
+            {
+                var result = MathHelper.FindNumberOfOperatorsInEquation("13 + -4 - -23 * -4");
+                Assert.That(result, Is.EqualTo(3));
             }
         }
 
@@ -114,12 +145,12 @@ namespace DanHuntCalculatorAssignment
             }
 
             [Test]
-            public void FindsHighestPriorityOperatorWhenSeveralArePresent()
+            public void FindsLeftMostHighPriorityOperatorWhenSeveralAreTied()
             {
                 var equation = "12-44+32/3*96";
                 var result = MathHelper.FindHighestPriorityOperatorIndex(equation);
 
-                Assert.That(result, Is.EqualTo(equation.IndexOf("*")));
+                Assert.That(result, Is.EqualTo(equation.IndexOf("/")));
             }
 
             [Test]
@@ -132,6 +163,75 @@ namespace DanHuntCalculatorAssignment
                 Assert.That(result, Is.EqualTo(equation.IndexOf("*")));
                 //This next test duplicates the above assert but leaving it to be clear what I'm explicitly testing
                 Assert.That(result, Is.EqualTo(2)); 
+            }
+
+            [Test]
+            public void HandlesNegativeNumberBeforeAddition()
+            {
+                var equation = "-13 + 4";
+
+                var result = MathHelper.FindHighestPriorityOperatorIndex(equation);
+
+                Assert.That(result, Is.EqualTo(equation.IndexOf("+")));
+            }
+        }
+
+        public class GetRemainingEquationTests
+        {
+            [Test]
+            public void HandlesSpacesInMiddle()
+            {
+                var equation = "1 + 6 / 2 * 4";
+                var index = MathHelper.FindHighestPriorityOperatorIndex(equation);
+                var operands = MathHelper.GetOperands(equation, index);
+                var operatorSymbol = equation[index].ToString();
+                var partialSolve = MathHelper.SolveOperator(operands[0], operands[1], operatorSymbol);
+
+                var result = MathHelper.GetRemainingEquation(equation, index, operands, partialSolve);
+
+                Assert.That(result, Is.EqualTo("1 + 3 * 4"));
+            }
+
+            [Test]
+            public void HandlesSpaceHighPriorityStart()
+            {
+                var equation = "6 / 2 * 4 + 2 - 4";
+                var index = MathHelper.FindHighestPriorityOperatorIndex(equation);
+                var operands = MathHelper.GetOperands(equation, index);
+                var operatorSymbol = equation[index].ToString();
+                var partialSolve = MathHelper.SolveOperator(operands[0], operands[1], operatorSymbol);
+
+                var result = MathHelper.GetRemainingEquation(equation, index, operands, partialSolve);
+
+                Assert.That(result, Is.EqualTo("3 * 4 + 2 - 4"));
+            }
+
+            [Test]
+            public void HandlesSpaceHighPriorityEnd()
+            {
+                var equation = "10 + 2 - 3 * 6";
+                var index = MathHelper.FindHighestPriorityOperatorIndex(equation);
+                var operands = MathHelper.GetOperands(equation, index);
+                var operatorSymbol = equation[index].ToString();
+                var partialSolve = MathHelper.SolveOperator(operands[0], operands[1], operatorSymbol);
+
+                var result = MathHelper.GetRemainingEquation(equation, index, operands, partialSolve);
+
+                Assert.That(result, Is.EqualTo("10 + 2 - 18"));
+            }
+
+            [Test]
+            public void HandlesNegatives()
+            {
+                var equation = "10 + 2 - -3 * -6";
+                var index = MathHelper.FindHighestPriorityOperatorIndex(equation);
+                var operands = MathHelper.GetOperands(equation, index);
+                var operatorSymbol = equation[index].ToString();
+                var partialSolve = MathHelper.SolveOperator(operands[0], operands[1], operatorSymbol);
+
+                var result = MathHelper.GetRemainingEquation(equation, index, operands, partialSolve);
+
+                Assert.That(result, Is.EqualTo("10 + 2 - 18"));
             }
         }
     }

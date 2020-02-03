@@ -20,3 +20,7 @@ D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\b
 D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.pdb
 D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.xml
 D:\EDU\CSC_260_Object_Oriented\CSC260-Assignment-1\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.CopyComplete
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.dll
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.pdb
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.xml
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.CopyComplete

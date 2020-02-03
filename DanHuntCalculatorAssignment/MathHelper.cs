@@ -10,7 +10,8 @@ namespace DanHuntCalculatorAssignment
     //This class will control all the actual math guts of the calculator
     {
         internal const string PrioritizedOperators = "^x*/+-"; //List of mathematical operators in PEMDAS order
-        internal const string OperatorRegex = @"[-+*x\/%\^]"; //Regex to find operators 
+        internal const string OperatorRegex = @"\s[-+*x\/%\^]\s"; //Regex to find operators without breaking negative numbers
+            //Shout out to MVPs Regex101.com and StackOverflow for this sweet regex
 
         public static double DoMath(string equation)
         {
@@ -47,17 +48,26 @@ namespace DanHuntCalculatorAssignment
 
             var partialSolve = SolveOperator(operands[0], operands[1], operatorSymbol); //Solve this portion onf the equation
 
-            //Now we need to sandwich the result back into the remaining equation and solve that 
-            var firstPartOfEquation = equation.Substring(0, operatorIndex - operands[0].ToString().Length);
-            var lastPartOfEquation =
-                equation.Substring(operatorIndex+1 + operands[1].ToString().Length);
+            //Now we need to sandwich the result back into the remaining equation
+            var remainingEquation = GetRemainingEquation(equation, operatorIndex, operands, partialSolve);
 
-            return SolveEquation(firstPartOfEquation+partialSolve+lastPartOfEquation); //Combine the result & remaining equation, continue solving it.
+            //Finally, continue solving the remaining equation
+            return SolveEquation(remainingEquation);
         }
 
-        private static double[] GetOperands(string equation, int index)
+        internal static string GetRemainingEquation(string equation, int operatorIndex, double[] operands, double partialSolve)
         {
-            //Get two arrays of numbers, one before and one after the operand. These will still be strings for now. 
+            //Assembles remaining equation to be solved after resolving one operator/operand set in the middle. 
+            //Gets substrings from before & after solved portion of equation. Length is +/-1 to handle spaces.
+            var firstPartOfEquation = equation.Substring(0, operatorIndex - operands[0].ToString().Length-1);
+            var lastPartOfEquation = equation.Substring(operatorIndex + 1 + operands[1].ToString().Length+1);
+            var remainingEquation = firstPartOfEquation + partialSolve + lastPartOfEquation;
+            return remainingEquation;
+        }
+
+        internal static double[] GetOperands(string equation, int index)
+        {
+            //Get two arrays of numbers, one before and one after the operand. These will still be strings for now.
             var beforeOperand = Regex.Split(equation.Substring(0, index),OperatorRegex); //Get everything before the operator
             var afterOperand = Regex.Split(equation.Substring(index+1), OperatorRegex); //Get everything after the operator
 
@@ -74,7 +84,7 @@ namespace DanHuntCalculatorAssignment
 
             for (var i = 0; i < equation.Length; i++)
             {
-                if (IsAnOperator(equation[i]))
+                if (IsAnOperator(equation[i]) && !(i == 0 && equation[i] == '-'))
                 {
                     if(indexOfHighestPriorityOperator == -1)
                     {
@@ -98,7 +108,7 @@ namespace DanHuntCalculatorAssignment
 
         private static bool IsPriorityTied(string operator1, string operator2)
         {
-            //Check if operators are tied in PEMDAS order. This prevents preserves the equation solving left to right 
+            //Check if operators are tied in PEMDAS order. This preserves the equation solving left to right 
             var highPriority = "^S";
             var mediumPriority = "*x/";
             var lowPriority = "+-";
@@ -109,18 +119,8 @@ namespace DanHuntCalculatorAssignment
 
         internal static int FindNumberOfOperatorsInEquation(string equation)
         {
-            var totalOperators = 0; //keep track of operators in equation
-
-            foreach (var character in equation)
-            //iterate through equation and check each character to see if it is an operator
-            {
-                if (IsAnOperator(character))
-                {
-                    totalOperators++;
-                }
-            }
-
-            return totalOperators; //placeholder
+            //Returns total number of operators in equation. Used to determine if equation is solved or not.
+            return Regex.Matches(equation, OperatorRegex).Count;
         }
 
         private static bool IsAnOperator(char character)

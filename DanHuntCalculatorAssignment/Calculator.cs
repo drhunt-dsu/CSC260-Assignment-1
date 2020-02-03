@@ -106,7 +106,7 @@ namespace DanHuntCalculatorAssignment
             double result = 0;
             try
             {
-                result = MathHelper.DoMath(tbxInputOutput.Text.Replace(" ", string.Empty));
+                result = MathHelper.DoMath(tbxInputOutput.Text);
             }
             catch (ArithmeticException exception)
             {
@@ -119,7 +119,6 @@ namespace DanHuntCalculatorAssignment
         }
 
         #endregion
-
         #region Keypress Handlers
 
         private void CalculatorKeyPress(object sender, KeyPressEventArgs e)
@@ -132,7 +131,6 @@ namespace DanHuntCalculatorAssignment
             }
         }
         #endregion
-
         #region Stored memory value functions
         private void StoreValueInMemory()
         {
