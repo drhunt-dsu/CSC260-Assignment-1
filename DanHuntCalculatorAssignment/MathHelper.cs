@@ -1,15 +1,21 @@
-﻿using System;
+﻿//Dan Hunt
+//Daniel.Hunt@trojans.dsu.edu
+//CSC260 Assignment 1: Calculator
+
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DanHuntCalculatorAssignment
 {
+    //Suppressing Resharper warnings for localization since it is not really needed for this assignment
     [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
     public static class MathHelper
     //This class will control all the actual math guts of the calculator
     {
-        internal const string PrioritizedOperators = "^x*/+-"; //List of mathematical operators in PEMDAS order
+        internal const string PrioritizedOperators = "^x*/%+-"; //List of mathematical operators in PEMDAS order
         internal const string OperatorRegex = @"\s[-+*x\/%\^]\s"; //Regex to find operators without breaking negative numbers
             //Shout out to MVPs Regex101.com and StackOverflow for this sweet regex
 
@@ -110,7 +116,7 @@ namespace DanHuntCalculatorAssignment
         {
             //Check if operators are tied in PEMDAS order. This preserves the equation solving left to right 
             var highPriority = "^S";
-            var mediumPriority = "*x/";
+            var mediumPriority = "*x/%";
             var lowPriority = "+-";
             return highPriority.Contains(operator1) && highPriority.Contains(operator2)
                    || mediumPriority.Contains(operator1) && mediumPriority.Contains(operator2)
@@ -123,7 +129,7 @@ namespace DanHuntCalculatorAssignment
             return Regex.Matches(equation, OperatorRegex).Count;
         }
 
-        private static bool IsAnOperator(char character)
+        internal static bool IsAnOperator(char character)
         {
             return PrioritizedOperators.Contains(character);
         }
@@ -143,6 +149,10 @@ namespace DanHuntCalculatorAssignment
                     return operand1 + operand2;
                 case "-":
                     return operand1 - operand2;
+                case "%":
+                    return operand1 % operand2;
+                case "^":
+                    return Math.Pow(operand1,operand2);
                 default:
                     throw new ArithmeticException($"Cannot process the following equation: {operand1} {symbol} {operand2}");
             }

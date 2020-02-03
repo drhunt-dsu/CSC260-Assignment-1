@@ -24,3 +24,11 @@ C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssig
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.pdb
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\nunit.framework.xml
 C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\obj\Debug\DanHuntCalculatorAssignment.csproj.CopyComplete
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\Castle.Core.dll
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\Moq.dll
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\Castle.Core.xml
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\Moq.xml
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\drhunt\Documents\important work related files\HW\DanHuntCalculatorAssignment\DanHuntCalculatorAssignment\bin\Debug\System.Threading.Tasks.Extensions.xml

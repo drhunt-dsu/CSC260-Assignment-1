@@ -1,4 +1,10 @@
-﻿using System.Linq;
+﻿//Dan Hunt
+//Daniel.Hunt@trojans.dsu.edu
+//CSC260 Assignment 1: Calculator
+
+
+using System;
+using System.Linq;
 using System.Security;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -38,6 +44,20 @@ namespace DanHuntCalculatorAssignment
             {
                 var result = MathHelper.DoMath("10 - 6");
                 Assert.That(result, Is.EqualTo(10 - 6));
+            }
+
+            [Test]
+            public void ModulusSimpleEquation()
+            {
+                var result = MathHelper.DoMath("10 % 6");
+                Assert.That(result, Is.EqualTo(10 % 6));
+            }
+
+            [Test]
+            public void ExponentSimpleEquation()
+            {
+                var result = MathHelper.DoMath("10 ^ 2");
+                Assert.That(result, Is.EqualTo(Math.Pow(10,2)));
             }
 
             [Test]
@@ -90,6 +110,14 @@ namespace DanHuntCalculatorAssignment
             {
                 var result = MathHelper.SolveOperator(10,6,"-");
                 Assert.That(result, Is.EqualTo(10 - 6));
+            }
+
+            [Test]
+            public void Exponents()
+            {
+                //Exponents? Is that a word? To Exponent something?
+                var result = MathHelper.SolveOperator(10, 2, "^");
+                Assert.That(result, Is.EqualTo(Math.Pow(10,2)));
             }
         }
 

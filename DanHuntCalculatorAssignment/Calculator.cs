@@ -13,8 +13,8 @@ namespace DanHuntCalculatorAssignment
     public partial class Calculator : Form
     {
 
-        private float? _memVal;
-        private const string InitialValue = "0";
+        private float? _memVal; //Tracks user stored memory value. Nullable in case no memory stored.
+        private const string InitialValue = "0"; //Initial value for calculator so we don't have an empty string
 
         public Calculator()
         {
@@ -28,44 +28,55 @@ namespace DanHuntCalculatorAssignment
         }
 
         #region ButtonHandlers
-        private void btnNumberKeys_Click(object sender, EventArgs e)
+        protected internal void btnNumberKeys_Click(object sender, EventArgs e)
         {
             //Append each button's text into the calculator
             AppendToInputOutputBox(((ButtonBase) sender).Text);
         }
 
-        private void btnOperator_click(object sender, EventArgs e)
+        protected internal void btnOperator_click(object sender, EventArgs e)
         {
             //Surround operators with space for easy reading
-            var stringToAppend = $" {((ButtonBase) sender).Text} ";
-            AppendToInputOutputBox(stringToAppend);
+            AppendOperatorToInputOutputBox(((ButtonBase)sender).Text);
         }
 
-        private void btnZero_Click(object sender, EventArgs e)
+        protected internal void btnZero_Click(object sender, EventArgs e)
         {
-            //Check to see if we can actually add a zero before adding it. 
-            if (!tbxInputOutput.Text.EndsWith(" ") || tbxInputOutput.Text != "0")
+            AppendZeroToInputOuputBox();
+        }
+
+        private void btnPower_Click(object sender, EventArgs e)
+        {
+            AppendOperatorToInputOutputBox("^");
+        }
+
+        protected internal void btnSquare_Click(object sender, EventArgs e)
+        {
+            AppendOperatorToInputOutputBox("^");
+            AppendToInputOutputBox("2");
+        }
+
+        protected internal void btnPosNeg_Click(object sender, EventArgs e)
+        {
+            MakeNegative();
+        }
+
+        protected internal void MakeNegative()
+        {
+            //Dynamically sets last (or only) nonzero number in textbox to negative
+            if (tbxInputOutput.Text != InitialValue && GetLastNumberAsStringFromTextbox() != "0")
             {
-                AppendToInputOutputBox(((ButtonBase)sender).Text);
+                var newLastNumber = (double.Parse(GetLastNumberAsStringFromTextbox()) * -1).ToString();
+                var trimmedText = tbxInputOutput.Text.Remove(
+                    tbxInputOutput.Text.Length - GetLastNumberAsStringFromTextbox().Length,
+                    GetLastNumberAsStringFromTextbox().Length); //Trim out the number we just made negative
+                tbxInputOutput.Text =  trimmedText + newLastNumber; //combine the new number with the original string and put it in the box
             }
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        protected internal void btnBack_Click(object sender, EventArgs e)
         {
-            //Remove the latest character in the textbox, only if there are characters in the textbox 
-            if (tbxInputOutput.Text.Length > 0)
-            {
-                //If we are deleting the last character, swap it with a zero 
-                if (tbxInputOutput.Text == string.Empty || tbxInputOutput.Text.Length == 1)
-                {
-                    tbxInputOutput.Text = InitialValue;
-                }
-                //Otherwise just delete the rightmost character
-                else
-                {
-                    tbxInputOutput.Text = tbxInputOutput.Text.Remove(tbxInputOutput.Text.Length - 1);
-                }
-            }
+            DeleteLastCharacter();
         }
 
         private void btnClearBox_Click(object sender, EventArgs e)
@@ -100,7 +111,7 @@ namespace DanHuntCalculatorAssignment
             AddDecimalToCurrentNumber();
         }
 
-        private void btnEquals_Click(object sender, EventArgs e)
+        protected internal void btnEquals_Click(object sender, EventArgs e)
         {
             //try to get the answer but catch errors in case user is dividing by zero or something
             double result = 0;
@@ -110,7 +121,7 @@ namespace DanHuntCalculatorAssignment
             }
             catch (ArithmeticException exception)
             {
-                MessageBox.Show(exception.Message, "Uh oh");
+                ShowErrorMessage(exception);
             }
 
             tbxHistory.Text += $"{tbxInputOutput.Text} = {result}{Environment.NewLine}";
@@ -118,17 +129,41 @@ namespace DanHuntCalculatorAssignment
             tbxInputOutput.Text = result.ToString(CultureInfo.InvariantCulture);
         }
 
+        protected internal virtual void ShowErrorMessage(ArithmeticException exception)
+        {
+            MessageBox.Show(exception.Message, "Uh oh");
+        }
+
         #endregion
         #region Keypress Handlers
 
-        private void CalculatorKeyPress(object sender, KeyPressEventArgs e)
+        protected internal void CalculatorKeyPress(object sender, KeyPressEventArgs e)
         {
-            var operatorChars = MathHelper.PrioritizedOperators.ToCharArray();  //Get an array of operators so we can quickly make keypresses.
-
-            if (e.KeyChar >= 48 && e.KeyChar <= 57 || operatorChars.Contains(e.KeyChar)) //Only allow an explicit list of keys. Operators & Numbers.
+            if (e.KeyChar >= '1' && e.KeyChar <= '9') //Check if it's a non-zero number
             {
                 AppendToInputOutputBox(e.KeyChar.ToString());
             }
+
+            else if (MathHelper.IsAnOperator(e.KeyChar)) //Check if it's a mathematical operator
+            {
+                AppendOperatorToInputOutputBox(e.KeyChar.ToString());
+            }
+
+            else if (e.KeyChar == '0') //If it's zero, handle with special logic
+            {
+                AppendZeroToInputOuputBox();
+            }
+
+            else if (e.KeyChar == (char) Keys.Back)
+            {
+                DeleteLastCharacter();
+            }
+
+            else if (e.KeyChar == '.') //Handle Decimals with special logic
+            {
+                AddDecimalToCurrentNumber();
+            }
+
         }
         #endregion
         #region Stored memory value functions
@@ -154,7 +189,8 @@ namespace DanHuntCalculatorAssignment
         }
         #endregion
         #region TbxInput/Output textbox manip
-        private void AppendToInputOutputBox(string val)
+
+        protected internal void AppendToInputOutputBox(string val)
         {
             if (tbxInputOutput.Text == InitialValue)
             {
@@ -167,6 +203,31 @@ namespace DanHuntCalculatorAssignment
             }
         }
 
+        private void AppendZeroToInputOuputBox()
+        {
+            //Check to see if we can actually add a zero before adding it. 
+            if (!tbxInputOutput.Text.EndsWith(" ") || tbxInputOutput.Text != "0")
+            {
+                AppendToInputOutputBox("0");
+            }
+        }
+
+        private void AppendOperatorToInputOutputBox(string text)
+        {
+            var stringToAppend = $" {text} "; //Add spaces around operators to make them easier to read & parse
+            if (tbxInputOutput.Text != InitialValue)
+            {
+                //If we are not in inital state just add the operator as normal.
+                AppendToInputOutputBox(stringToAppend);
+            }
+            else
+            {
+                //If textbox is in initial state we need to preserve the 0 when adding the operator.
+                AppendToInputOutputBox(tbxInputOutput.Text + stringToAppend);
+            }
+        }
+
+
         private void ResetInputOutputTbx()
         {
             tbxInputOutput.Text = InitialValue;
@@ -176,24 +237,69 @@ namespace DanHuntCalculatorAssignment
         {
             //We only want to append a decimal if the LAST number in the box does not already have one.
             //For this we will quickly split the equation with regex and check the last number in the list.
-
-            var currentString = tbxInputOutput.Text;
-            //Stackoverflow to the rescue with this regex idea
-            //https://stackoverflow.com/questions/13525024/how-to-split-a-mathematical-expression-on-operators-as-delimiters-while-keeping
-            string[] numbers = Regex.Split(currentString, MathHelper.OperatorRegex);
-            if (!numbers.Last().Contains("."))
+            if (!GetLastNumberAsStringFromTextbox().Contains("."))
             {
                 AppendToInputOutputBox(".");
             }
         }
+
+        private string GetLastNumberAsStringFromTextbox()
+        {
+            //Return last number in current textbox
+            return GetAllNumbersFromTextbox().Last(); 
+        }
+
+        private string[] GetAllNumbersFromTextbox()
+        {
+            //Stackoverflow to the rescue with this regex idea
+            //https://stackoverflow.com/questions/13525024/how-to-split-a-mathematical-expression-on-operators-as-delimiters-while-keeping
+            return Regex.Split(tbxInputOutput.Text, MathHelper.OperatorRegex);
+
+        }
+
+        private void DeleteLastCharacter()
+        {
+            //Remove the latest character in the textbox, only if there are characters in the textbox 
+            if (tbxInputOutput.Text.Length > 0)
+            {
+                //If we are deleting the last character, swap it with a zero 
+                if (tbxInputOutput.Text == string.Empty || tbxInputOutput.Text.Length == 1)
+                {
+                    tbxInputOutput.Text = InitialValue;
+                }
+                //Otherwise just delete the rightmost non space character
+                //Spaces must be preserved for parsing. 
+                else
+                {
+                    var charToDelete = tbxInputOutput.Text.Last();
+                    //If last character is a space, assume we have an operator and delete 3 characters
+                    if (charToDelete == ' ')
+                    {
+                        tbxInputOutput.Text = tbxInputOutput.Text.Remove(tbxInputOutput.Text.Length - 3);
+                    }
+
+                    //If it's a number just delete it
+                    if (charToDelete >= '0' && charToDelete <= '9' || charToDelete == '.')
+                    {
+                        tbxInputOutput.Text = tbxInputOutput.Text.Remove(tbxInputOutput.Text.Length - 1);
+                    }
+
+                    //Finally if we just deleted a negative number we must delete the negative sign as well
+                    if (GetLastNumberAsStringFromTextbox() == "-")
+                    {
+                        tbxInputOutput.Text = tbxInputOutput.Text.Remove(tbxInputOutput.Text.Length - 1);
+                    }
+                }
+            }
+        }
         #endregion
         #region Utility Functions
-        private void ResetCalculator()
+
+        internal void ResetCalculator()
         {
             ResetInputOutputTbx();
             ClearValueInMemory();
         }
-
         #endregion
     }
 }

@@ -60,6 +60,7 @@
             this.lblMemVal = new System.Windows.Forms.Label();
             this.lblHistory = new System.Windows.Forms.Label();
             this.tbxHistory = new System.Windows.Forms.TextBox();
+            this.btnModulus = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbxInputOutput
@@ -112,6 +113,7 @@
             // 
             // btnClearAll
             // 
+            this.btnClearAll.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClearAll.Location = new System.Drawing.Point(88, 143);
             this.btnClearAll.Name = "btnClearAll";
             this.btnClearAll.Size = new System.Drawing.Size(56, 33);
@@ -148,6 +150,7 @@
             this.btnPower.TabIndex = 8;
             this.btnPower.Text = "x^y";
             this.btnPower.UseVisualStyleBackColor = true;
+            this.btnPower.Click += new System.EventHandler(this.btnPower_Click);
             // 
             // btnSquare
             // 
@@ -157,6 +160,7 @@
             this.btnSquare.TabIndex = 9;
             this.btnSquare.Text = "x^2";
             this.btnSquare.UseVisualStyleBackColor = true;
+            this.btnSquare.Click += new System.EventHandler(this.btnSquare_Click);
             // 
             // btnSquareRoot
             // 
@@ -305,6 +309,7 @@
             this.btnPosNeg.TabIndex = 24;
             this.btnPosNeg.Text = "+/-";
             this.btnPosNeg.UseVisualStyleBackColor = true;
+            this.btnPosNeg.Click += new System.EventHandler(this.btnPosNeg_Click);
             // 
             // btnZero
             // 
@@ -375,6 +380,17 @@
             this.tbxHistory.TabIndex = 31;
             this.tbxHistory.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // btnModulus
+            // 
+            this.btnModulus.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnModulus.Location = new System.Drawing.Point(26, 143);
+            this.btnModulus.Name = "btnModulus";
+            this.btnModulus.Size = new System.Drawing.Size(56, 33);
+            this.btnModulus.TabIndex = 32;
+            this.btnModulus.Text = "%";
+            this.btnModulus.UseVisualStyleBackColor = true;
+            this.btnModulus.Click += new System.EventHandler(this.btnOperator_click);
+            // 
             // Calculator
             // 
             this.AcceptButton = this.btnEquals;
@@ -382,6 +398,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClearAll;
             this.ClientSize = new System.Drawing.Size(540, 405);
+            this.Controls.Add(this.btnModulus);
             this.Controls.Add(this.tbxHistory);
             this.Controls.Add(this.lblHistory);
             this.Controls.Add(this.lblMemVal);
@@ -457,6 +474,7 @@
         private System.Windows.Forms.Label lblMemVal;
         private System.Windows.Forms.Label lblHistory;
         private System.Windows.Forms.TextBox tbxHistory;
+        private System.Windows.Forms.Button btnModulus;
     }
 }
 
