@@ -45,6 +45,7 @@ namespace DanHuntCalculatorAssignment
 
             var partialSolve = SolveOperator(operands[0], operands[1], operatorSymbol); //Solve this portion onf the equation
 
+            //Now we need to sandwich the result back into the remaining equation and solve that 
             var firstPartOfEquation = equation.Substring(0, operatorIndex - operands[0].ToString().Length);
             var lastPartOfEquation =
                 equation.Substring(operatorIndex+1 + operands[1].ToString().Length);
@@ -79,9 +80,11 @@ namespace DanHuntCalculatorAssignment
                         indexOfHighestPriorityOperator = i;
                         highestPriorityOperator = equation[i];
                     }
-                    else if (PrioritizedOperators.IndexOf(equation[i]) < PrioritizedOperators.IndexOf(highestPriorityOperator))
+                    else if (PrioritizedOperators.IndexOf(equation[i]) < PrioritizedOperators.IndexOf(highestPriorityOperator)
+                             && !IsPriorityTied(equation[i].ToString(), highestPriorityOperator.ToString()))
                     {
                         //Next, check if current operator is higher priority than the index we are saving. If so, update our return value.
+                        //If priority is tied, skip it since we want to use the leftmost.
                         indexOfHighestPriorityOperator = i;
                         highestPriorityOperator = equation[i];
                     }
@@ -89,6 +92,17 @@ namespace DanHuntCalculatorAssignment
             }
 
             return indexOfHighestPriorityOperator;
+        }
+
+        private static bool IsPriorityTied(string operator1, string operator2)
+        {
+            //Check if operators are tied in PEMDAS order. This prevents preserves the equation solving left to right 
+            var highPriority = "^S";
+            var mediumPriority = "*x/";
+            var lowPriority = "+-";
+            return highPriority.Contains(operator1) && highPriority.Contains(operator2)
+                   || mediumPriority.Contains(operator1) && mediumPriority.Contains(operator2)
+                   || lowPriority.Contains(operator1) && lowPriority.Contains(operator2);
         }
 
         internal static int FindNumberOfOperatorsInEquation(string equation)
@@ -111,7 +125,6 @@ namespace DanHuntCalculatorAssignment
         {
             return PrioritizedOperators.Contains(character);
         }
-
 
         internal static double SolveOperator(double operand1, double operand2, string symbol)
         {
