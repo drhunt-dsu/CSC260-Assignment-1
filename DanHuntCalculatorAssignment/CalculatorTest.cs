@@ -328,7 +328,6 @@ namespace DanHuntCalculatorAssignment
             private object sender;
             private KeyPressEventArgs args;
             private Calculator sut;
-            private char key;
 
             [SetUp]
             protected void SetUp()
@@ -426,6 +425,18 @@ namespace DanHuntCalculatorAssignment
                 var result = sut.Controls.Find("tbxInputOutput", false)[0].Text;
 
                 Assert.That(result, Is.EqualTo("123."));
+            }
+
+            [Test]
+            public void EnterKeySolvesEquation()
+            {
+                sut.AppendToInputOutputBox("1 + 2 * 3");
+                args.KeyChar = (char) Keys.Enter;
+                sut.CalculatorKeyPress(sender, args);
+
+                var result = sut.Controls.Find("tbxInputOutput", false)[0].Text;
+
+                Assert.That(result, Is.EqualTo("7"));
             }
         }
     }

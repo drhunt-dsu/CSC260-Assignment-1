@@ -113,20 +113,7 @@ namespace DanHuntCalculatorAssignment
 
         protected internal void btnEquals_Click(object sender, EventArgs e)
         {
-            //try to get the answer but catch errors in case user is dividing by zero or something
-            double result = 0;
-            try
-            {
-                result = MathHelper.DoMath(tbxInputOutput.Text);
-            }
-            catch (ArithmeticException exception)
-            {
-                ShowErrorMessage(exception.Message, "Uh Oh");
-            }
-
-            tbxHistory.Text += $"{tbxInputOutput.Text} = {result}{Environment.NewLine}";
-            ResetInputOutputTbx(); //Clear the input from the box
-            tbxInputOutput.Text = result.ToString(CultureInfo.InvariantCulture);
+            SolveEquationInTextbox();
         }
 
         protected internal void btnSquareRoot_Click(object sender, EventArgs e)
@@ -148,6 +135,12 @@ namespace DanHuntCalculatorAssignment
                 //If conditions are not correct for using the squareroot button, throw an error to let the user know.
                 ShowErrorMessage("Can only use sqrt button on one number because I never implemented parentheses. Sorry.", "Dev was lazy");
             }
+        }
+
+        private void btnClearHistory_Click(object sender, EventArgs e)
+        {
+            //Simply clear the history
+            tbxHistory.Text = "";
         }
 
         #endregion
@@ -178,6 +171,11 @@ namespace DanHuntCalculatorAssignment
             else if (e.KeyChar == '.') //Handle Decimals with special logic
             {
                 AddDecimalToCurrentNumber();
+            }
+
+            else if (e.KeyChar == (char)Keys.Enter)
+            {
+                SolveEquationInTextbox();
             }
 
         }
@@ -242,7 +240,6 @@ namespace DanHuntCalculatorAssignment
                 AppendToInputOutputBox(tbxInputOutput.Text + stringToAppend);
             }
         }
-
 
         private void ResetInputOutputTbx()
         {
@@ -322,6 +319,24 @@ namespace DanHuntCalculatorAssignment
             //This method simply throws a messagebox with a message & title. 
             //I made it its own method so it can be overridden in tests.
             MessageBox.Show(message, title);
+        }
+
+        private void SolveEquationInTextbox()
+        {
+            //try to get the answer but catch errors in case user is dividing by zero or something
+            double result = 0;
+            try
+            {
+                result = MathHelper.DoMath(tbxInputOutput.Text);
+            }
+            catch (ArithmeticException exception)
+            {
+                ShowErrorMessage(exception.Message, "Uh Oh");
+            }
+
+            tbxHistory.Text += $"{tbxInputOutput.Text} = {result}{Environment.NewLine}";
+            ResetInputOutputTbx(); //Clear the input from the box
+            tbxInputOutput.Text = result.ToString(CultureInfo.InvariantCulture);
         }
         #endregion
     }

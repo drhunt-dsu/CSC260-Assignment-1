@@ -61,6 +61,7 @@
             this.lblHistory = new System.Windows.Forms.Label();
             this.tbxHistory = new System.Windows.Forms.TextBox();
             this.btnModulus = new System.Windows.Forms.Button();
+            this.btnClearHistory = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbxInputOutput
@@ -394,6 +395,16 @@
             this.btnModulus.UseVisualStyleBackColor = true;
             this.btnModulus.Click += new System.EventHandler(this.btnOperator_click);
             // 
+            // btnClearHistory
+            // 
+            this.btnClearHistory.Location = new System.Drawing.Point(435, 46);
+            this.btnClearHistory.Name = "btnClearHistory";
+            this.btnClearHistory.Size = new System.Drawing.Size(75, 23);
+            this.btnClearHistory.TabIndex = 33;
+            this.btnClearHistory.Text = "Clear History";
+            this.btnClearHistory.UseVisualStyleBackColor = true;
+            this.btnClearHistory.Click += new System.EventHandler(this.btnClearHistory_Click);
+            // 
             // Calculator
             // 
             this.AcceptButton = this.btnEquals;
@@ -401,6 +412,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClearAll;
             this.ClientSize = new System.Drawing.Size(540, 405);
+            this.Controls.Add(this.btnClearHistory);
             this.Controls.Add(this.btnModulus);
             this.Controls.Add(this.tbxHistory);
             this.Controls.Add(this.lblHistory);
@@ -478,6 +490,7 @@
         private System.Windows.Forms.Label lblHistory;
         private System.Windows.Forms.TextBox tbxHistory;
         private System.Windows.Forms.Button btnModulus;
+        private System.Windows.Forms.Button btnClearHistory;
     }
 }
 
