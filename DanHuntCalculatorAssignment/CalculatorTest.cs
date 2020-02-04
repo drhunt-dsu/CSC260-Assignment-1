@@ -1,14 +1,10 @@
 ﻿//Dan Hunt
 //Daniel.Hunt@trojans.dsu.edu
 //CSC260 Assignment 1: Calculator
-
-
 using System;
-using System.Net.Mime;
 using System.Windows.Forms;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 
 namespace DanHuntCalculatorAssignment
@@ -252,10 +248,10 @@ namespace DanHuntCalculatorAssignment
             public void DivideByZeroTest()
             {
                 mockSut.Object.AppendToInputOutputBox("10 / 0");
-                mockSut.Setup(x => x.ShowErrorMessage(It.IsAny<ArithmeticException>())); //We don't actually want to show the error so mock it
+                mockSut.Setup(x => x.ShowErrorMessage(It.IsAny<string>(), It.IsAny<string>())); //We don't actually want to show the error so mock it
                 mockSut.Object.btnEquals_Click(sender, args);
 
-                mockSut.Verify(x => x.ShowErrorMessage(It.IsAny<ArithmeticException>()), Times.Once);
+                mockSut.Verify(x => x.ShowErrorMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             }
 
             [Test]
@@ -279,6 +275,52 @@ namespace DanHuntCalculatorAssignment
 
                 Assert.That(result, Is.EqualTo("1 + 2 * 3 = 7" + Environment.NewLine));
             }
+        }
+
+        public class SquareRootButtonTests
+        {
+            private object sender;
+            private EventArgs args;
+            private Mock<Calculator> mockSut;
+
+            [SetUp]
+            public void SetUp()
+            {
+                sender = new object();
+                args = new EventArgs();
+                mockSut = new Mock<Calculator>() {CallBase = true};
+                mockSut.Setup(x => x.ShowErrorMessage(It.IsAny<string>(), It.IsAny<string>()));
+            }
+
+            [Test]
+            public void DoesNothingIfMoreThanOneNumberPresent()
+            {
+                mockSut.Object.AppendToInputOutputBox("1 + 2");
+                mockSut.Object.btnSquareRoot_Click(sender, args);
+
+                var result = mockSut.Object.Controls.Find("tbxInputOutput", false)[0].Text;
+
+                //Make sure the output doesn't change & and error is thrown
+                Assert.That(result, Is.EqualTo("1 + 2"));
+                mockSut.Verify(x => x.ShowErrorMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            }
+
+            [Test]
+            public void PerformsOperationIfOnlyOneValuePresent()
+            {
+                mockSut.Object.AppendToInputOutputBox("9");
+                mockSut.Object.btnSquareRoot_Click(sender, args);
+
+                var resultInputOutput = mockSut.Object.Controls.Find("tbxInputOutput", false)[0].Text;
+                var resultHistory = mockSut.Object.Controls.Find("tbxHistory", false)[0].Text;
+
+                //Make sure the output shows correct value & and error is not thrown
+                Assert.That(resultInputOutput, Is.EqualTo("3"));
+                Assert.That(resultHistory, Is.EqualTo($"√(9) = 3 {Environment.NewLine}"));
+                mockSut.Verify(x => x.ShowErrorMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            }
+
+
         }
 
         public class KeyPressTests

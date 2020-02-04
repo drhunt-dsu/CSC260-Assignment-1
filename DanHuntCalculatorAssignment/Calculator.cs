@@ -121,7 +121,7 @@ namespace DanHuntCalculatorAssignment
             }
             catch (ArithmeticException exception)
             {
-                ShowErrorMessage(exception);
+                ShowErrorMessage(exception.Message, "Uh Oh");
             }
 
             tbxHistory.Text += $"{tbxInputOutput.Text} = {result}{Environment.NewLine}";
@@ -129,9 +129,25 @@ namespace DanHuntCalculatorAssignment
             tbxInputOutput.Text = result.ToString(CultureInfo.InvariantCulture);
         }
 
-        protected internal virtual void ShowErrorMessage(ArithmeticException exception)
+        protected internal void btnSquareRoot_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(exception.Message, "Uh oh");
+            //SquareRoot button will only work with one operand and NO operators in the box.
+            //This is due to time constraints preventing me from implementing parentheses 
+            
+            //First check the number of operators & operands to see if we can do a square root 
+            if (GetAllNumbersFromTextbox().Length == 1 &&
+                MathHelper.FindNumberOfOperatorsInEquation(tbxInputOutput.Text) == 0)
+            {
+                //If we can do a squareroot, simply squareroot whatever value is in the box and add the equation to the history
+                var root = Math.Sqrt(double.Parse(tbxInputOutput.Text));
+                tbxHistory.Text += $"√({tbxInputOutput.Text}) = {root.ToString()} {Environment.NewLine}"; 
+                tbxInputOutput.Text = root.ToString();
+            }
+            else
+            {
+                //If conditions are not correct for using the squareroot button, throw an error to let the user know.
+                ShowErrorMessage("Can only use sqrt button on one number because I never implemented parentheses. Sorry.", "Dev was lazy");
+            }
         }
 
         #endregion
@@ -217,7 +233,7 @@ namespace DanHuntCalculatorAssignment
             var stringToAppend = $" {text} "; //Add spaces around operators to make them easier to read & parse
             if (tbxInputOutput.Text != InitialValue)
             {
-                //If we are not in inital state just add the operator as normal.
+                //If we are not in initial state just add the operator as normal.
                 AppendToInputOutputBox(stringToAppend);
             }
             else
@@ -299,6 +315,13 @@ namespace DanHuntCalculatorAssignment
         {
             ResetInputOutputTbx();
             ClearValueInMemory();
+        }
+
+        protected internal virtual void ShowErrorMessage(string message, string title)
+        {
+            //This method simply throws a messagebox with a message & title. 
+            //I made it its own method so it can be overridden in tests.
+            MessageBox.Show(message, title);
         }
         #endregion
     }

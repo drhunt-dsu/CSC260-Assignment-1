@@ -170,6 +170,7 @@
             this.btnSquareRoot.TabIndex = 10;
             this.btnSquareRoot.Text = "sqrt";
             this.btnSquareRoot.UseVisualStyleBackColor = true;
+            this.btnSquareRoot.Click += new System.EventHandler(this.btnSquareRoot_Click);
             // 
             // btnDivide
             // 

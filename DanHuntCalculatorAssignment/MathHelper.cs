@@ -165,10 +165,8 @@ namespace DanHuntCalculatorAssignment
             {
                 throw new ArithmeticException("Cannot divide by zero!");
             }
-            else
-            {
-                return numerator / denominator;
-            }
+
+            return numerator / denominator;
         }
 
     }
