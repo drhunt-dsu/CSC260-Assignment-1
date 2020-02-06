@@ -428,6 +428,18 @@ namespace DanHuntCalculatorAssignment
             }
 
             [Test]
+            public void DecimalAddsZeroWhenNecessary()
+            {
+                sut.AppendToInputOutputBox("12 + ");
+                args.KeyChar = '.';
+                sut.CalculatorKeyPress(sender, args);
+
+                var result = sut.Controls.Find("tbxInputOutput", false)[0].Text;
+
+                Assert.That(result, Is.EqualTo("12 + 0."));
+            }
+
+            [Test]
             public void EnterKeySolvesEquation()
             {
                 sut.AppendToInputOutputBox("1 + 2 * 3");

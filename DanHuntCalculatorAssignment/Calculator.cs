@@ -252,6 +252,10 @@ namespace DanHuntCalculatorAssignment
             //For this we will quickly split the equation with regex and check the last number in the list.
             if (!GetLastNumberAsStringFromTextbox().Contains("."))
             {
+                if (tbxInputOutput.Text.Last() == ' ')
+                {
+                    AppendToInputOutputBox("0");
+                }
                 AppendToInputOutputBox(".");
             }
         }
